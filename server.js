@@ -25,7 +25,7 @@ io.on('connection',socket=>{
   socket.on('joinRoom',({username,room})=>
   {
     //Join the Specified Room
-    const user=userJoin(socket.id,username,room);
+    const user = userJoin(socket.id, username, room);
     socket.join(user.room);
 
     //Welcome Current User
@@ -50,20 +50,22 @@ io.on('connection',socket=>{
 
 
   //Runs when the client disconnects
-  socket.on('disconnect',()=>
-  {
-    const user=userLeave(socket.id);
-    if(user){
-      io.to(user.room).emit('message',formatMessage(bot,`${user.username} has left the chat`))
-    }
+  socket.on("disconnect", () => {
+    const user = userLeave(socket.id);
 
-    //Send Users and room info
-    io.to(user.room).emit('roomUsers',{
-      room:user.room,
-      users:getRoomUsers(user.room)
-    })
-    
-  })
+    if (user) {
+      io.to(user.room).emit(
+        "message",
+        formatMessage(bot, `${user.username} has left the chat`)
+      );
+
+      // Send users and room info
+      io.to(user.room).emit("roomUsers", {
+        room: user.room,
+        users: getRoomUsers(user.room),
+      });
+    }
+  });
 
   
 
